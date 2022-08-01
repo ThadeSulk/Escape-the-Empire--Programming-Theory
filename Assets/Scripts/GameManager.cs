@@ -1,78 +1,112 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject[] asteriodPFs;
-    public GameObject[] enemyPFs;
-    public GameObject shieldBoost;
-    private PlayerController playerScript;
-
-    private float xLimitAst = 13;
-    private float zPosAst = 15;
-    private float xLimitEnemy = 10;
-    private float zPosEnemy = -10;
-
-    private float spawnDelayAst = 0.5f;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        playerScript = GameObject.Find("Player").GetComponent<PlayerController>();
-        InvokeRepeating("SpawnAsteriod", spawnDelayAst, spawnDelayAst);
-        InvokeRepeating("SpawnAsteriodLarge", spawnDelayAst, spawnDelayAst * 4);
-        InvokeRepeating("SpawnShieldBoost", spawnDelayAst, spawnDelayAst*10);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        int enemyCount = FindObjectsOfType<Enemy>().Length;
-        if (enemyCount < 2)
-        {
-            SpawnEnemy();
-        }
-    }
-
-    void SpawnAsteriod()
-    {
-        if (!playerScript.gameOver)
-        {
-            int setAstSize = Random.Range(0, 2);
-            Instantiate(asteriodPFs[setAstSize], RandomAstSpawnPos(), asteriodPFs[setAstSize].transform.rotation);
-        }
-    }
+    public static GameManager Instance;
     
-    void SpawnAsteriodLarge()
+    public static List<LeaderboardEntry> leaderboardEntries = new List<LeaderboardEntry>();
+    private static readonly int maxLeaderboardEntries = 5;
+
+    private void Awake()
     {
-        if (!playerScript.gameOver)
+        if (Instance != null)
         {
-            Instantiate(asteriodPFs[2], RandomAstSpawnPos(), asteriodPFs[2].transform.rotation);
+            Destroy(gameObject);
+            return;
         }
-    }
-    void SpawnEnemy()
-    {
-        if (!playerScript.gameOver)
-        {
-            int randomEnemyType = Random.Range(0, enemyPFs.Length);
-            Instantiate(enemyPFs[randomEnemyType], RandomEnemySpawnPos(), enemyPFs[randomEnemyType].transform.rotation);
-        }
-    }
-    void SpawnShieldBoost()
-    {
-        Instantiate(shieldBoost, RandomAstSpawnPos(), shieldBoost.transform.rotation);
-    }
-        Vector3 RandomAstSpawnPos()
-    {
-        float xPos = Random.Range(-xLimitAst, xLimitAst);
-        return new Vector3(xPos, 0, zPosAst);
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
-    Vector3 RandomEnemySpawnPos()
+    //A serialiazable class for an entry on the leaderboard, able to be converted and stored in json
+    [System.Serializable]
+    public class LeaderboardEntry
     {
-        float xPos = Random.Range(-xLimitEnemy, xLimitEnemy);
-        return new Vector3(xPos, 0, zPosEnemy);
+        public string userName;
+        public int score;
+        //public string date;
     }
-    
+
+    //Add a new variable of type LeaderboardEntry to the list of entries: sorts by score and deletes list down to max number of entries
+    public static void AddToLeaderboard(LeaderboardEntry newEntry)
+    {
+        leaderboardEntries.Add(newEntry);
+        leaderboardEntries = SortList(leaderboardEntries);
+        if (leaderboardEntries.Count > maxLeaderboardEntries)
+        {
+            leaderboardEntries.RemoveRange(maxLeaderboardEntries, leaderboardEntries.Count - maxLeaderboardEntries);
+        }
+    }
+
+    public static void SaveLeaderboard()
+    {
+        string jsonString = JsonHelper.ToJson<LeaderboardEntry>(leaderboardEntries.ToArray());
+        File.WriteAllText(Application.persistentDataPath + "/leaderboardsavefile.json", jsonString);
+    }
+
+    public static void LoadLeaderboard()
+    {
+        string jsonString = File.ReadAllText(Application.persistentDataPath + "/leaderboardsavefile.json");
+        LeaderboardEntry[] jsonArray = JsonHelper.FromJson<LeaderboardEntry>(jsonString);
+        foreach (LeaderboardEntry entry in jsonArray)
+        {
+            AddToLeaderboard(entry);
+        }
+        // leaderboardEntries = jsonArray.ToList();
+    }
+
+    //List sorting algorythm, took from code monkey video but made separate method
+    public static List<LeaderboardEntry> SortList(List<LeaderboardEntry> list)
+    {
+        for(int i = 0; i < list.Count; i++)
+        {
+            for (int j = 0; j < list.Count; j++)
+            {
+                if (list[j].score < list[i].score)
+                {
+                    //if there is a higher score item, replace current item with that item
+                    LeaderboardEntry temp = list[i];
+                    list[i] = list[j];
+                    list[j] = temp;
+                }
+            }
+        }
+        return list;
+    }
+
+    //Code added from stackoverflow. The JsonHelper aids with getting a list or array serializable for json based saving
+    //https://stackoverflow.com/questions/36239705/serialize-and-deserialize-json-and-json-array-in-unity
+    public static class JsonHelper
+    {
+        public static T[] FromJson<T>(string json)
+        {
+            Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(json);
+            return wrapper.Items;
+        }
+
+        public static string ToJson<T>(T[] array)
+        {
+            Wrapper<T> wrapper = new Wrapper<T>();
+            wrapper.Items = array;
+            return JsonUtility.ToJson(wrapper);
+        }
+
+        public static string ToJson<T>(T[] array, bool prettyPrint)
+        {
+            Wrapper<T> wrapper = new Wrapper<T>();
+            wrapper.Items = array;
+            return JsonUtility.ToJson(wrapper, prettyPrint);
+        }
+
+        [System.Serializable]
+        private class Wrapper<T>
+        {
+            public T[] Items;
+        }
+    }
+    //End of stackoverflow code
 }
