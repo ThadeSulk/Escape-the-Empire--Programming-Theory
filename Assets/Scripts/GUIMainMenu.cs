@@ -15,11 +15,12 @@ public class GUIMainMenu : MonoBehaviour
     private Transform scoreContainer;
     private Transform scoreTemplate;
 
-    public void StartGame()
+    
+    public void StartGame()                     //Loads the gameplay scene
     {
         SceneManager.LoadScene(1);
     }
-    public void Exit()
+    public void Exit()                          //Exits game (both in editor and final build)
     {
 #if UNITY_EDITOR
         EditorApplication.ExitPlaymode();
@@ -27,11 +28,13 @@ public class GUIMainMenu : MonoBehaviour
         Application.Quit();
 #endif
     }
-    public void ReturnMenu()
+    
+    public void ReturnMenu()                    //Useful if same GUI Script is used in Game, otherwise delete
     {
         SceneManager.LoadScene(0);
     }
-    public void LeaderboardToggle()
+
+    public void LeaderboardToggle()             //Activates leaderboard and displays current leaderboardEntries; Or Deactivates if active
     {
         if (leaderboardPanel.activeSelf)
         {
@@ -43,18 +46,19 @@ public class GUIMainMenu : MonoBehaviour
             CreateLeaderboard();            
         }
     }
-    public void GUISaveLeaderboard()
+
+    public void GUISaveLeaderboard()            //Method to use SaveManager to save current scores
     {
-        GameManager.SaveLeaderboard();
+        SaveManager.SaveLeaderboard();
     }
-    public void GUILoadLeaderboard()
+    public void GUILoadLeaderboard()            //Method to use SaveManager to load leaderboard from savefile, recreates leaderboard with new scores
     {
-        GameManager.LoadLeaderboard();
+        SaveManager.LoadLeaderboard();
         CreateLeaderboard();
     }
-    //Takes the template in the Score Container, duplicates it and adds take from the LeadershipEntries list in Menu Managers.
+    //Takes the template in the Score Container, duplicates it and adds take from the LeadershipEntries list in SaveManager.
     //Does this for each item in the LeadershipEntries list.
-    public void CreateLeaderboard()
+    public void CreateLeaderboard()             //Consider replacing the list of transforms with an index integer
     {
         List<Transform> leaderboardEntriesTransforms = new List<Transform>();
         scoreContainer = leaderboardPanel.gameObject.transform.Find("ScoreContainer");
@@ -71,13 +75,13 @@ public class GUIMainMenu : MonoBehaviour
         }
 
         //Adds a leaderboard onto the GUI for each element in the GameManager's list leaderboardEntires
-        foreach (GameManager.LeaderboardEntry leaderboardEntry in GameManager.leaderboardEntries)
+        foreach (SaveManager.LeaderboardEntry leaderboardEntry in SaveManager.leaderboardEntries)
         {
             CreateLeaderboardEntryTransform(leaderboardEntry, scoreContainer, leaderboardEntriesTransforms);
         }
     }
     //Adds a leaderboard row onto the GUI for an element in the MenuManager's list leaderboardEntires
-    private void CreateLeaderboardEntryTransform(GameManager.LeaderboardEntry leaderboardEntry, Transform container, List<Transform> transformList)
+    private void CreateLeaderboardEntryTransform(SaveManager.LeaderboardEntry leaderboardEntry, Transform container, List<Transform> transformList)
     {
         float templateHeight = 20f;
         Transform scoreTransform = Instantiate(scoreTemplate, container);
