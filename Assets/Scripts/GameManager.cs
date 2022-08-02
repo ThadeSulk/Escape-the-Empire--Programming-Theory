@@ -6,7 +6,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    
+
+    public static int score { get; set; }
     
     //Makes a singleton of GameManager to exist until the game is exitted
     private void Awake()
