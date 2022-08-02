@@ -9,9 +9,11 @@ public class Asteriod : MonoBehaviour
     private float initialSpeed = 10;
     private float continuousSpeed = 1;
     private float maxXdirection = 0.3f;
-    private float maxTorque;
+    private float maxTorque = 1;
     private float xCoordinateDestroy = 20;
     private float zCoordinateDestroy = 20;
+
+    public int health = 3;
 
     // Start is called before the first frame update
     void Start()
@@ -37,5 +39,23 @@ public class Asteriod : MonoBehaviour
     {
         return new Vector3(Random.Range(-maxTorque, maxTorque), Random.Range(-maxTorque, maxTorque), Random.Range(-maxTorque, maxTorque));
     }
-
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Asteriod"))
+        {
+            health--;
+        }
+        else
+        {
+            health -= 10;
+        }
+        if (health <= 0) 
+        { 
+            Destruction(); 
+        }
+    }
+    public virtual void Destruction()
+    {
+        Destroy(gameObject);
+    }
 }

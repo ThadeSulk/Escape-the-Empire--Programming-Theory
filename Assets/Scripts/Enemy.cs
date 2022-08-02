@@ -8,8 +8,8 @@ public class Enemy : MonoBehaviour
 
     private float speed;
     public string enemyType;    //Name of Enemy Type
-    public int enemyHealth;     //Health for Enemy Type
-    public float fireRate;        //bullets per second
+    public int enemyHealth = 3;     //Health for Enemy Type
+    private float fireRate = .5f;        //bullets per second
 
     // Start is called before the first frame update
     void Start()

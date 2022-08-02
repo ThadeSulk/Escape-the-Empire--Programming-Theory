@@ -5,6 +5,7 @@ using UnityEngine;
 public class SpawnManager_Lvl1 : MonoBehaviour
 {
     public GameObject[] asteriodPFs;
+    public GameObject[] largeAsteriodPFs;
     public GameObject[] enemyPFs;
     public GameObject shieldBoost;
     private PlayerController playerScript;
@@ -15,14 +16,16 @@ public class SpawnManager_Lvl1 : MonoBehaviour
     private float zPosEnemy = -10;
 
     private float spawnDelayAst = 0.5f;
+    private float spawnDelayAstLarge = 1f;
+    private float spawnDelayShieldBoost = 5f;
 
     // Start is called before the first frame update
     void Start()
     {
         playerScript = GameObject.Find("Player").GetComponent<PlayerController>();
-        InvokeRepeating("SpawnAsteriod", spawnDelayAst, spawnDelayAst);
-        InvokeRepeating("SpawnAsteriodLarge", spawnDelayAst, spawnDelayAst * 4);
-        InvokeRepeating("SpawnShieldBoost", spawnDelayAst, spawnDelayAst*10);
+        Invoke("SpawnAsteriod", spawnDelayAst*4);
+        Invoke("SpawnAsteriodLarge", spawnDelayAstLarge*3);
+        Invoke("SpawnShieldBoost", spawnDelayShieldBoost/2);
     }
 
     // Update is called once per frame
@@ -39,18 +42,30 @@ public class SpawnManager_Lvl1 : MonoBehaviour
     {
         if (!playerScript.gameOver)
         {
-            int setAstSize = Random.Range(0, 2);
+            int setAstSize = Random.Range(0, asteriodPFs.Length);
             Instantiate(asteriodPFs[setAstSize], RandomAstSpawnPos(), asteriodPFs[setAstSize].transform.rotation);
+            Invoke("SpawnAsteriod", spawnDelayAst);
         }
     }
-    
+
+    public void SpawnAsteriodOnDestruction()
+    {
+        //Vector3 position = gameObject.transform.position;
+            int setAstSize = Random.Range(0, asteriodPFs.Length);
+            Instantiate(asteriodPFs[setAstSize], gameObject.transform.position, asteriodPFs[setAstSize].transform.rotation);
+
+    }
+
     void SpawnAsteriodLarge()
     {
         if (!playerScript.gameOver)
         {
-            Instantiate(asteriodPFs[2], RandomAstSpawnPos(), asteriodPFs[2].transform.rotation);
+            int setAstSize = Random.Range(0, largeAsteriodPFs.Length);
+            Instantiate(largeAsteriodPFs[setAstSize], RandomAstSpawnPos(), asteriodPFs[setAstSize].transform.rotation);
+            Invoke("SpawnAsteriodLarge", spawnDelayAstLarge);
         }
     }
+
     void SpawnEnemy()
     {
         if (!playerScript.gameOver)
@@ -62,7 +77,9 @@ public class SpawnManager_Lvl1 : MonoBehaviour
     void SpawnShieldBoost()
     {
         Instantiate(shieldBoost, RandomAstSpawnPos(), shieldBoost.transform.rotation);
+        Invoke("SpawnShieldBoost", spawnDelayShieldBoost);
     }
+
         Vector3 RandomAstSpawnPos()
     {
         float xPos = Random.Range(-xLimitAst, xLimitAst);

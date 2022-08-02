@@ -75,6 +75,9 @@ public class PlayerController : MonoBehaviour
             playerShields--;
         }
     }
+
+
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("ShieldBoost"))
