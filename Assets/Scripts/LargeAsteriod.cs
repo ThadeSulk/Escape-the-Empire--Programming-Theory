@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class LargeAsteriod : Asteriod
 {
-    private SpawnManager_Lvl1 spawnManager_Lvl1;
+    private LevelManager1 levelManager1;
     private int partsOnDestruction = 3;
 
     private void Awake()
     {
-        spawnManager_Lvl1 = GameObject.Find("SpawnManager").GetComponent<SpawnManager_Lvl1>();
+        levelManager1 = GameObject.Find("LevelManager").GetComponent<LevelManager1>();
     }
 
     public override void Destruction()
@@ -18,7 +18,7 @@ public class LargeAsteriod : Asteriod
         for (int i = 0; i < partsOnDestruction; i++)
         {
             Debug.Log("Spawn");
-            spawnManager_Lvl1.SpawnAsteriodOnDestruction();
+            levelManager1.SpawnAsteriodOnDestruction();
         }
     base.Destruction();
         

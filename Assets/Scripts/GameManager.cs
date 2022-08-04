@@ -7,8 +7,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public static int score { get; set; }
-    
+    public static int score;
+    public static int playerShields;
+
     //Makes a singleton of GameManager to exist until the game is exitted
     private void Awake()
     {
@@ -20,6 +21,5 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-    }
-
+            }
 }

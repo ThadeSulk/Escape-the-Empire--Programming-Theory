@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    //Public Variables
-    public float playerShields = 2;
-    public bool gameOver = false;
+    //Player Shields and game over in the Level Manager script
     
     //Player characteristics and Limits
     private float forwardSpeed = 10;
@@ -14,20 +10,13 @@ public class PlayerController : MonoBehaviour
     private float zLimit = 10;
     private float xLimit = 13;
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
     // Update is called once per frame
     void Update()
     {
         LimitToPlayspace();
         MovePlayer();
-
     }
+
     //Get directional input and move player
     void MovePlayer()
     {
@@ -66,13 +55,17 @@ public class PlayerController : MonoBehaviour
             //Activate shield hit noise
 
             //test if game is over because the player got hit without having shields
-            if (playerShields == 0)
+            if (LevelManager1.playerShields <= 0)
             {
-                gameOver = true;
+                LevelManager1.gameOver = true;
                 Debug.Log("Game Over!");
                 //Play death/gameover noise
+                GameObject.Find("LevelManager").GetComponent<LevelManager1>().GameOver();
             }
-            playerShields--;
+            else
+            {
+                LevelManager1.playerShields--;
+            }
         }
     }
 
@@ -80,9 +73,9 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("ShieldBoost"))
+        if (other.gameObject.CompareTag("ShieldBoost") && LevelManager1.playerShields < LevelManager1.maxPlayerShields)
         {
-            playerShields++;
+            LevelManager1.playerShields++;
             Destroy(other.gameObject);
         }
     }

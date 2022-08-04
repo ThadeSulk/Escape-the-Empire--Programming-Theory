@@ -6,7 +6,7 @@ public class SpawnManager : MonoBehaviour
 {
     public GameObject[] asteriodPFs;
     public GameObject[] enemyPFs;
-    private PlayerController playerScript;
+    //private PlayerController playerScript;
 
     private float xLimitAst = 13;
     private float zPosAst = 15;
@@ -18,7 +18,7 @@ public class SpawnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerScript = GameObject.Find("Player").GetComponent<PlayerController>();
+        //playerScript = GameObject.Find("Player").GetComponent<PlayerController>();
         InvokeRepeating("SpawnAsteriod", spawnDelayAst, spawnDelayAst);
         InvokeRepeating("SpawnAsteriodLarge", spawnDelayAst, spawnDelayAst * 4);
     }
@@ -35,7 +35,7 @@ public class SpawnManager : MonoBehaviour
 
     void SpawnAsteriod()
     {
-        if (!playerScript.gameOver)
+        if (!LevelManager1.gameOver)
         {
             int setAstSize = Random.Range(0, 2);
             Instantiate(asteriodPFs[setAstSize], RandomAstSpawnPosition(), asteriodPFs[setAstSize].transform.rotation);
@@ -44,14 +44,14 @@ public class SpawnManager : MonoBehaviour
     
     void SpawnAsteriodLarge()
     {
-        if (!playerScript.gameOver)
+        if (!LevelManager1.gameOver)
         {
             Instantiate(asteriodPFs[2], RandomAstSpawnPosition(), asteriodPFs[2].transform.rotation);
         }
     }
     void SpawnEnemy()
     {
-        if (!playerScript.gameOver)
+        if (!LevelManager1.gameOver)
         {
             int randomEnemyType = Random.Range(0, enemyPFs.Length);
             Instantiate(enemyPFs[randomEnemyType], RandomEnemySpawnPosition(), enemyPFs[randomEnemyType].transform.rotation);

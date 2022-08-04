@@ -57,5 +57,6 @@ public class Asteriod : MonoBehaviour
     public virtual void Destruction()
     {
         Destroy(gameObject);
+        GameManager.score++;
     }
 }

@@ -39,8 +39,14 @@ public class Enemy : MonoBehaviour
             enemyHealth--;
             if(enemyHealth < 1)
             {
-                Destroy(gameObject);
+                Death();
             }
         }
     }
+    private void Death()
+    {
+        Destroy(gameObject);
+        GameManager.score += 10;
+    }
+
 }
