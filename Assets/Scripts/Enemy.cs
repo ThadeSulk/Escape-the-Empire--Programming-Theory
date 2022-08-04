@@ -46,7 +46,7 @@ public class Enemy : MonoBehaviour
     private void Death()
     {
         Destroy(gameObject);
-        GameManager.score += 10;
+        LevelManager1.score += 10;
     }
 
 }

@@ -1,4 +1,7 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,6 +12,16 @@ public class PlayerController : MonoBehaviour
     private float horizontalSpeed = 10;
     private float zLimit = 10;
     private float xLimit = 13;
+
+    private bool isInvincible = false;
+    private float invincibilityDuration = 1.0f; //how long is player invincible after getting hit
+
+    //Add Game Over event and Loss of Shields event
+    public delegate void PlayerDestroyed();
+    public static event PlayerDestroyed OnDestruction;
+
+    public delegate void OnShieldValueChange();
+    public static event OnShieldValueChange shieldValueChange;
 
     // Update is called once per frame
     void Update()
@@ -54,17 +67,23 @@ public class PlayerController : MonoBehaviour
         {
             //Activate shield hit noise
 
-            //test if game is over because the player got hit without having shields
-            if (LevelManager1.playerShields <= 0)
+            //Nothing happens to player if they are invincible and they collide with an asteroid
+            if (!isInvincible)
             {
-                LevelManager1.gameOver = true;
-                Debug.Log("Game Over!");
-                //Play death/gameover noise
-                GameObject.Find("LevelManager").GetComponent<LevelManager1>().GameOver();
-            }
-            else
-            {
-                LevelManager1.playerShields--;
+                //test if game is over because the player got hit without having shields
+                if (LevelManager1.playerShields <= 0)
+                {
+                    LevelManager1.gameOver = true;
+                    Debug.Log("Game Over!");
+                    //Play death/gameover noise
+                    OnDestruction?.Invoke();                    
+                }
+                else
+                {
+                    LevelManager1.playerShields--;
+                    shieldValueChange?.Invoke();
+                    StartCoroutine(InvincibilityFrames());
+                }
             }
         }
     }
@@ -75,8 +94,18 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("ShieldBoost") && LevelManager1.playerShields < LevelManager1.maxPlayerShields)
         {
-            LevelManager1.playerShields++;
             Destroy(other.gameObject);
+            LevelManager1.playerShields++;
+            shieldValueChange?.Invoke();
+            
         }
+    }
+
+    IEnumerator InvincibilityFrames()
+    {
+        isInvincible = true;
+        //set animation here or in update
+        yield return new WaitForSeconds(invincibilityDuration);
+        isInvincible = false;
     }
 }

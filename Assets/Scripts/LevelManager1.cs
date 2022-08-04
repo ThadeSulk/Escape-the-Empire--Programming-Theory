@@ -6,20 +6,22 @@ using TMPro;
 
 public class LevelManager1 : MonoBehaviour
 {
-    public static LevelManager1 Instance;
+    //public static LevelManager1 Instance;
 
-    public GameObject[] asteriodPFs;
-    public GameObject[] largeAsteriodPFs;
-    public GameObject[] enemyPFs;
-    public GameObject shieldBoost;
-    public GameObject inputPanel;
-    public TMP_InputField inputField;
+    [SerializeField] GameObject[] asteriodPFs;
+    [SerializeField] GameObject[] largeAsteriodPFs;
+    [SerializeField] GameObject[] enemyPFs;
+    [SerializeField] GameObject shieldBoost;
+    [SerializeField] GameObject inputPanel;
+    [SerializeField] TMP_InputField inputField;
+    [SerializeField] GameObject startText;
+    [SerializeField] GameObject gameOverText;
 
     //Game Variables
     public static int score;
     public static float playerShields;
-    public static float maxPlayerShields = 4.001f;
-    public bool isGameStarted;
+    public static float maxPlayerShields = 4;
+    public static bool isGameStarted;
     public static bool gameOver;
 
     private float xLimitAst = 13;
@@ -35,7 +37,7 @@ public class LevelManager1 : MonoBehaviour
     void Awake()
     {
         //Resets all static values at begginning of scene
-        GameManager.score = 0;                      
+        GameManager.totalScore = 0;                      
         score = 0;
         playerShields = 2;
         isGameStarted = false;
@@ -81,14 +83,26 @@ public class LevelManager1 : MonoBehaviour
     }
     void StartGame()
     {
-        Invoke("SpawnAsteriod", spawnDelayAst * 4);
-        Invoke("SpawnAsteriodLarge", spawnDelayAstLarge * 3);
+        startText.SetActive(false);
+        Invoke("SpawnAsteriod", 0);
+        Invoke("SpawnAsteriodLarge", spawnDelayAstLarge * 5);
         Invoke("SpawnShieldBoost", spawnDelayShieldBoost / 2);
     }
-    public void GameOver()
+
+    void OnEnable()                                 //Activates event triggers from playercontroller when LevelManager created
+    {
+        PlayerController.OnDestruction += GameOver;
+    }
+
+    void OnDisable()                                 //Deactivates event triggers from playercontroller when LevelManager disabled
+    {
+        PlayerController.OnDestruction -= GameOver;
+    }
+
+        void GameOver()
     {
         gameOver = true;
-        //GameOverText.SetActive(true);
+        gameOverText.SetActive(true);
         Time.timeScale = 0;
         if (SaveManager.leaderboardEntries.Count > 0)
         {

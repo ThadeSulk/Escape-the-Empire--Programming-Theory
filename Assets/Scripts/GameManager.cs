@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public static int score;
+    public static int totalScore;
     public static int playerShields;
 
     //Makes a singleton of GameManager to exist until the game is exitted
@@ -21,5 +21,8 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-            }
+
+        //Leaderboard is automatically saved so it needs to automatically be loaded
+        SaveManager.LoadLeaderboard();
+    }
 }
