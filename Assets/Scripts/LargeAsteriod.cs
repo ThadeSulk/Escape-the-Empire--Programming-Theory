@@ -9,16 +9,15 @@ public class LargeAsteriod : Asteriod
 
     private void Awake()
     {
+        health = 10;
         levelManager1 = GameObject.Find("LevelManager").GetComponent<LevelManager1>();
     }
 
-    public override void Destruction()
+    public override void Destruction()              //Asteroid brakes into # of smaller asteroids as set above
     {
-        Debug.Log("BeforeSpawn");
         for (int i = 0; i < partsOnDestruction; i++)
         {
-            Debug.Log("Spawn");
-            levelManager1.SpawnAsteriodOnDestruction();
+            levelManager1.SpawnAsteriodOnDestruction(gameObject.transform.position);
         }
     base.Destruction();
         

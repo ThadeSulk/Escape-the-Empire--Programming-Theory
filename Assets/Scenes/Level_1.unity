@@ -1970,6 +1970,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5833997495195279372, guid: 19e0d2251f674704ea437eec64e91f4a, type: 3}
+      propertyPath: lazerShotPF
+      value: 
+      objectReference: {fileID: 6277678167834556792, guid: 7a1a73214368d824f842512c7ec3665a, type: 3}
     - target: {fileID: 5833997495195279606, guid: 19e0d2251f674704ea437eec64e91f4a, type: 3}
       propertyPath: m_Name
       value: Player

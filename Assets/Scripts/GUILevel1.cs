@@ -76,12 +76,12 @@ public class GUILevel1 : MonoBehaviour
     
     void OnEnable()                                 //Activates event triggers from playercontroller when LevelManager created
     {
-        PlayerController.shieldValueChange += ChangeShieldGUI;
+        PlayerController.ShieldValueChange += ChangeShieldGUI;
     }
 
     void OnDisable()                                 //Deactivates event triggers from playercontroller when LevelManager disabled
     {
-        PlayerController.shieldValueChange -= ChangeShieldGUI;
+        PlayerController.ShieldValueChange -= ChangeShieldGUI;
     }
 
     void ChangeShieldGUI()                          //Turns shield icons on and off when shield event is triggered, confirms shield icon exists first

@@ -8,6 +8,8 @@ TagManager:
   - Enemy
   - Large
   - ShieldBoost
+  - PlayerLazer
+  - EnemyLazer
   layers:
   - Default
   - TransparentFX

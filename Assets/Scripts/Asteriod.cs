@@ -39,6 +39,12 @@ public class Asteriod : MonoBehaviour
     {
         return new Vector3(Random.Range(-maxTorque, maxTorque), Random.Range(-maxTorque, maxTorque), Random.Range(-maxTorque, maxTorque));
     }
+    public virtual void Destruction()
+    {
+        Destroy(gameObject);
+        LevelManager1.score++;
+    }    
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Asteriod"))
@@ -54,9 +60,19 @@ public class Asteriod : MonoBehaviour
             Destruction(); 
         }
     }
-    public virtual void Destruction()
+
+
+    private void OnTriggerEnter(Collider other)
     {
-        Destroy(gameObject);
-        LevelManager1.score++;
+        if (other.CompareTag("PlayerLazer") || other.CompareTag("EnemyLazer"))
+        {
+            health -= 10;
+            Destroy(other.gameObject);
+
+            if (health <= 0)
+            {
+                Destruction();
+            }
+        }
     }
 }

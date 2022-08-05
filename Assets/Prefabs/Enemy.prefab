@@ -47,9 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20f654661a0b2c64280f61c1eab2ee07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: Small
+  lazerShotPF: {fileID: 1260037525614249154, guid: b12a436944f20064e948b665aae34b70, type: 3}
   enemyHealth: 1
-  fireRate: 1
 --- !u!23 &3107855954533231599
 MeshRenderer:
   m_ObjectHideFlags: 0

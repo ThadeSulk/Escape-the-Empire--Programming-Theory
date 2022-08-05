@@ -5,10 +5,11 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     private GameObject player;
+    [SerializeField] GameObject lazerShotPF;
 
     private float speed;
-    public string enemyType;    //Name of Enemy Type
     public int enemyHealth = 3;     //Health for Enemy Type
+    private float delayBeforeFire = 2;
     private float fireRate = .5f;        //bullets per second
 
     // Start is called before the first frame update
@@ -16,7 +17,7 @@ public class Enemy : MonoBehaviour
     {
         player = GameObject.Find("Player");
         speed = Random.Range(5, 9);
-        
+        InvokeRepeating("FireLazer", delayBeforeFire, 1 / fireRate);
     }
 
     // Update is called once per frame
@@ -48,5 +49,9 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject);
         LevelManager1.score += 10;
     }
-
+    void FireLazer()
+    {
+        Instantiate(lazerShotPF, gameObject.transform.position + new Vector3(-0.2f, 0, 0), lazerShotPF.transform.rotation);
+        Instantiate(lazerShotPF, gameObject.transform.position + new Vector3(0.2f, 0, 0), lazerShotPF.transform.rotation);
+    }
 }

@@ -128,11 +128,14 @@ public class LevelManager1 : MonoBehaviour
         }
     }
 
-    public void SpawnAsteriodOnDestruction()
+    public void SpawnAsteriodOnDestruction(Vector3 position)
     {
         //Vector3 position = gameObject.transform.position;
         int setAstSize = Random.Range(0, asteriodPFs.Length);
-        Instantiate(asteriodPFs[setAstSize], gameObject.transform.position, asteriodPFs[setAstSize].transform.rotation);
+        int spawnOffsetX = 3;
+        int spawnOffsetZ = 2;
+        Instantiate(asteriodPFs[setAstSize], position + new Vector3(Random.Range(-spawnOffsetX,spawnOffsetX), 0, Random.Range(-spawnOffsetZ,spawnOffsetZ)),
+            asteriodPFs[setAstSize].transform.rotation);
 
     }
 
