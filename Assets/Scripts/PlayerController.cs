@@ -28,6 +28,7 @@ public class PlayerController : Spacecraft
     public delegate void OnReserveShotChange();
     public static event OnReserveShotChange ShotChange;
 
+
     // Update is called once per frame
     void Update()
     {
@@ -75,9 +76,14 @@ public class PlayerController : Spacecraft
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("Collision");
         if (collision.gameObject.CompareTag("Asteriod"))
         {
             TakeDamge();
+        }
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Death();
         }
     }
 
@@ -135,9 +141,12 @@ public class PlayerController : Spacecraft
                 LevelManager1.playerShields--;
                 ShieldValueChange?.Invoke();
                 StartCoroutine(InvincibilityFrames());
+                //
+                //invincibilityShield.SetActive(false);
             }
         }
     }
+
 
     protected override void Death()
     {

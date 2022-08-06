@@ -16,6 +16,7 @@ public class LevelManager1 : MonoBehaviour
     [SerializeField] TMP_InputField inputField;
     [SerializeField] GameObject startText;
     [SerializeField] GameObject gameOverText;
+    [SerializeField] GameObject restartText;
 
     //Game Variables
     public static int score;
@@ -61,7 +62,6 @@ public class LevelManager1 : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space) && !inputPanel.activeSelf)
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-                Debug.Log("Load Scene, no panel");
             }
             if (Input.GetKeyDown(KeyCode.Return) && inputPanel.activeSelf)
             {
@@ -69,7 +69,6 @@ public class LevelManager1 : MonoBehaviour
                 inputPanel.SetActive(false);
                 SaveManager.AddToLeaderboard(new SaveManager.LeaderboardEntry { userName = name, score = score });
                 SaveManager.SaveLeaderboard();
-                Debug.Log("Load Scene, Panel");
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
@@ -110,7 +109,7 @@ public class LevelManager1 : MonoBehaviour
             {
                 inputPanel.SetActive(true);
             }
-
+            else { restartText.SetActive(true);  }
         }
         else            //Turns on inputPanel if there are no saved scores on the leaderboard
         {

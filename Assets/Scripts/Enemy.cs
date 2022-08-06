@@ -16,6 +16,7 @@ public class Enemy : Spacecraft
     void Start()
     {
         laserOffset = new Vector3(0.3f, 0, 0);
+        invincibilityShield = transform.GetChild(0);
         invincibilityDuration = 1;
         StartCoroutine(InvincibilityFrames());
 
@@ -64,6 +65,10 @@ public class Enemy : Spacecraft
         if (collision.gameObject.CompareTag("Asteriod"))
         {
             TakeDamage();
+        }
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Death();
         }
     }
 

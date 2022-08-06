@@ -118,7 +118,7 @@ public class GUILevel1 : MonoBehaviour
         {
             shieldIconTransformList[Mathf.RoundToInt(LevelManager1.playerShields - 1)].gameObject.SetActive(true);
         }
-        if (shieldIconTransformList[Mathf.RoundToInt(LevelManager1.playerShields)] != null)
+        if (Mathf.RoundToInt(LevelManager1.playerShields) < LevelManager1.maxPlayerShields)
         {
             shieldIconTransformList[Mathf.RoundToInt(LevelManager1.playerShields)].gameObject.SetActive(false);
         }
