@@ -1111,6 +1111,8 @@ MonoBehaviour:
   - {fileID: 6785513246330603599, guid: f246ca7f69650a34c9e06af0207dd5b4, type: 3}
   enemyPFs:
   - {fileID: 3107855954533231597, guid: 5a19ae3d32401154bbd2d7dcaa79b6d4, type: 3}
+  - {fileID: 3107855954533231597, guid: 5a19ae3d32401154bbd2d7dcaa79b6d4, type: 3}
+  - {fileID: 3107855954533231597, guid: 5a19ae3d32401154bbd2d7dcaa79b6d4, type: 3}
   - {fileID: 6444169691165792621, guid: ed8d23744c359704a9fc4cc4253005f5, type: 3}
   shieldBoost: {fileID: 5648063413470516097, guid: e5805a27240312142b6face5b7528b1d, type: 3}
   inputPanel: {fileID: 1833841763}

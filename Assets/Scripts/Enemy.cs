@@ -79,6 +79,10 @@ public class Enemy : Spacecraft
             Destroy(other.gameObject);
             TakeDamage();
         }
+        else if (other.gameObject.CompareTag("Player"))
+        {
+            Death();
+        }
     }
 
     protected void TakeDamage()

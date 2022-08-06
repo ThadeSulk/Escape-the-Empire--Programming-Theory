@@ -81,10 +81,6 @@ public class PlayerController : Spacecraft
         {
             TakeDamge();
         }
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            Death();
-        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -95,10 +91,14 @@ public class PlayerController : Spacecraft
             LevelManager1.playerShields++;
             ShieldValueChange?.Invoke();
         }
-        if (other.gameObject.CompareTag("EnemyLaser"))
+        else if (other.gameObject.CompareTag("EnemyLaser"))
         {
             Destroy(other.gameObject);
             TakeDamge();
+        }
+        else if (other.gameObject.CompareTag("Enemy"))
+        {
+            Death();
         }
     }
 
