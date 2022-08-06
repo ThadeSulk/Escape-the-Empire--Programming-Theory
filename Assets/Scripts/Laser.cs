@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lazer : MonoBehaviour
+public class Laser : MonoBehaviour
 {
     private float speed = 10;
     private float zCoordinateDestroy = 20;

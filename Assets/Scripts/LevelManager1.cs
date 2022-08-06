@@ -27,7 +27,7 @@ public class LevelManager1 : MonoBehaviour
     private float xLimitAst = 13;
     private float zPosAst = 15;
     private float xLimitEnemy = 10;
-    private float zPosEnemy = -10;
+    private float zPosEnemy = -14;
 
     private float spawnDelayAst = 0.5f;
     private float spawnDelayAstLarge = 1f;

@@ -21,4 +21,9 @@ public class Spacecraft : MonoBehaviour
         Instantiate(laserShotPF, gameObject.transform.position - laserOffset, laserShotPF.transform.rotation);
         Instantiate(laserShotPF, gameObject.transform.position + laserOffset, laserShotPF.transform.rotation);
     }
+    protected virtual void Death()
+    {
+        //Play death/gameover noise
+
+    }
 }

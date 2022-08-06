@@ -5,17 +5,18 @@ using System.IO;
 public class PlayerController : Spacecraft
 {
     //Player Shields and game over in the Level Manager script
-    
+
     //Player characteristics and Limits
     private float forwardSpeed = 12;
     private float horizontalSpeed = 12;
     private float zLimit = 10;
-    private float xLimit = 13;
+    private float xLimit = 18;
 
     //Variables for Shooting
-    [SerializeField]  int shotsInReserve = 4;
-    private int maxShotsInReserve = 4;
-    [SerializeField] float reload = 0;
+    public static int shotsInReserve{ get; private set; } = 4;
+    public static int maxShotsInReserve { get; } = 4;
+    public static float reload { get; private set; } = 1;
+    private bool isRecharging = false;
 
     //Add Game Over event and Loss of Shields event
     public delegate void PlayerDestroyed();
@@ -37,6 +38,7 @@ public class PlayerController : Spacecraft
         {
             FireLaser();
             shotsInReserve--;
+            ShotChange?.Invoke();
         }
     }
 
@@ -75,26 +77,7 @@ public class PlayerController : Spacecraft
     {
         if (collision.gameObject.CompareTag("Asteriod"))
         {
-            //Activate shield hit noise
-
-            //Nothing happens to player if they are invincible and they collide with an asteroid
-            if (!isInvincible)
-            {
-                //test if game is over because the player got hit without having shields
-                if (LevelManager1.playerShields <= 0)
-                {
-                    LevelManager1.gameOver = true;
-                    Debug.Log("Game Over!");
-                    //Play death/gameover noise
-                    OnDestruction?.Invoke();                    
-                }
-                else
-                {
-                    LevelManager1.playerShields--;
-                    ShieldValueChange?.Invoke();
-                    StartCoroutine(InvincibilityFrames());
-                }
-            }
+            TakeDamge();
         }
     }
 
@@ -109,8 +92,7 @@ public class PlayerController : Spacecraft
         if (other.gameObject.CompareTag("EnemyLaser"))
         {
             Destroy(other.gameObject);
-            LevelManager1.playerShields--;
-            ShieldValueChange?.Invoke();
+            TakeDamge();
         }
     }
 
@@ -119,12 +101,49 @@ public class PlayerController : Spacecraft
         if (reload < 1)
         {
             reload += Time.deltaTime;
+            return;
         }
 
         if (reload >= 1 && shotsInReserve < maxShotsInReserve)
         {
             shotsInReserve++;
             reload = 0;
+            isRecharging = true;
+            ShotChange?.Invoke();
+            return;
         }
+        if (reload >=1 && isRecharging)
+        {
+            ShotChange?.Invoke();
+            isRecharging = false;
+        }
+    }
+
+    void TakeDamge()
+    {
+        //Nothing happens to player if they are invincible when they collide with an asteroid or get hit with an enemy laser
+        if (!isInvincible)
+        {
+            //test if game is over because the player got hit without having shields
+            if (LevelManager1.playerShields <= 0)
+            {
+                Death();
+            }
+            else
+            {
+                //Activate shield hit noise
+                LevelManager1.playerShields--;
+                ShieldValueChange?.Invoke();
+                StartCoroutine(InvincibilityFrames());
+            }
+        }
+    }
+
+    protected override void Death()
+    {
+        LevelManager1.gameOver = true;
+        Debug.Log("Game Over!");
+        OnDestruction?.Invoke();
+        base.Death();
     }
 }

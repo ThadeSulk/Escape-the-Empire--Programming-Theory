@@ -13,14 +13,16 @@ public class GUILevel1 : MonoBehaviour
     [SerializeField] GameObject confirmMenu;
     [SerializeField] Transform shieldIconParent;
     [SerializeField] Transform shieldIconTransformTemplate;
+    [SerializeField] Transform laserIconParent;
+    [SerializeField] Transform laserIconTransformTemplate;
 
     //Displays shield icons 
     private List<Transform> shieldIconTransformList = new List<Transform>();
+    private List<Transform> laserIconTransformList = new List<Transform>();
 
     private void Start()
     {
         //Creates a list of shield icons that can be turned on and off to show shield status
-        //Transform shieldIconTransformTemplate = shieldIconParent.GetComponentInChildren<Transform>();
         shieldIconTransformList.Add(shieldIconTransformTemplate);
         for(int i = 1; i < LevelManager1.maxPlayerShields; i++)
         {
@@ -33,6 +35,30 @@ public class GUILevel1 : MonoBehaviour
                 shieldIconTransform.gameObject.SetActive(false);
             }
         }
+        //Creates a list of laser icons that can be turned on and off to show shotsInReserve status
+        laserIconTransformList.Add(laserIconTransformTemplate);
+        int activeLaserIconCount = GetActiveLaserIconCount();
+        for (int i = 1; i < PlayerController.maxShotsInReserve + 1; i++)         //creates one additional icon because one shot is effectively stored in reload
+        {
+            float templateWidth = 25;
+
+            Transform laserIconTransform = Instantiate(laserIconTransformTemplate, laserIconParent);
+            laserIconTransform.GetComponent<RectTransform>().anchoredPosition += new Vector2(templateWidth * laserIconTransformList.Count, 0);
+            laserIconTransformList.Add(laserIconTransform);
+            if (laserIconTransformList.Count > activeLaserIconCount)
+            {
+                laserIconTransform.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private int GetActiveLaserIconCount()
+    {
+        if(PlayerController.reload >= 1)
+        {
+            return PlayerController.shotsInReserve + 1;
+        }
+        return PlayerController.shotsInReserve;
     }
 
     private void Update()
@@ -77,11 +103,13 @@ public class GUILevel1 : MonoBehaviour
     void OnEnable()                                 //Activates event triggers from playercontroller when LevelManager created
     {
         PlayerController.ShieldValueChange += ChangeShieldGUI;
+        PlayerController.ShotChange += ChangeLaserGUI;
     }
 
     void OnDisable()                                 //Deactivates event triggers from playercontroller when LevelManager disabled
     {
         PlayerController.ShieldValueChange -= ChangeShieldGUI;
+        PlayerController.ShotChange -= ChangeLaserGUI;
     }
 
     void ChangeShieldGUI()                          //Turns shield icons on and off when shield event is triggered, confirms shield icon exists first
@@ -93,6 +121,18 @@ public class GUILevel1 : MonoBehaviour
         if (shieldIconTransformList[Mathf.RoundToInt(LevelManager1.playerShields)] != null)
         {
             shieldIconTransformList[Mathf.RoundToInt(LevelManager1.playerShields)].gameObject.SetActive(false);
+        }
+    }
+    void ChangeLaserGUI()                          //Turns shield icons on and off when shield event is triggered, confirms shield icon exists first
+    {
+        int activeLaserIconCount = GetActiveLaserIconCount();
+        if (activeLaserIconCount >= 1)
+        {
+            laserIconTransformList[activeLaserIconCount - 1].gameObject.SetActive(true);
+        }
+        if (activeLaserIconCount < laserIconTransformList.Count)
+        {
+            laserIconTransformList[activeLaserIconCount].gameObject.SetActive(false);
         }
     }
 }

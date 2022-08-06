@@ -10,7 +10,7 @@ public class Asteriod : MonoBehaviour
     private float continuousSpeed = 1;
     private float maxXdirection = 0.3f;
     private float maxTorque = 1;
-    private float xCoordinateDestroy = 20;
+    private float xCoordinateDestroy = 24;
     private float zCoordinateDestroy = 20;
 
     public int health = 3;
