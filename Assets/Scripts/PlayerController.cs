@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.IO;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Spacecraft
 {
     //Player Shields and game over in the Level Manager script
     
@@ -12,11 +12,7 @@ public class PlayerController : MonoBehaviour
     private float zLimit = 10;
     private float xLimit = 13;
 
-    private bool isInvincible = false;
-    private float invincibilityDuration = 1.0f; //how long is player invincible after getting hit
-
     //Variables for Shooting
-    [SerializeField] GameObject lazerShotPF;
     [SerializeField]  int shotsInReserve = 4;
     private int maxShotsInReserve = 4;
     [SerializeField] float reload = 0;
@@ -36,10 +32,11 @@ public class PlayerController : MonoBehaviour
     {
         LimitToPlayspace();
         MovePlayer();
-        RechargingLazer();
+        RechargingLaser();
         if (Input.GetKeyDown(KeyCode.Space) && shotsInReserve > 0 && LevelManager1.isGameStarted)
         {
-            FireLazer();
+            FireLaser();
+            shotsInReserve--;
         }
     }
 
@@ -109,7 +106,7 @@ public class PlayerController : MonoBehaviour
             LevelManager1.playerShields++;
             ShieldValueChange?.Invoke();
         }
-        if (other.gameObject.CompareTag("EnemyLazer"))
+        if (other.gameObject.CompareTag("EnemyLaser"))
         {
             Destroy(other.gameObject);
             LevelManager1.playerShields--;
@@ -117,21 +114,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    IEnumerator InvincibilityFrames()
-    {
-        isInvincible = true;
-        //set animation here or in update
-        yield return new WaitForSeconds(invincibilityDuration);
-        isInvincible = false;
-    }
-    void FireLazer()
-    {
-        Instantiate(lazerShotPF, gameObject.transform.position + new Vector3(-0.5f, 0, 0), lazerShotPF.transform.rotation);
-        Instantiate(lazerShotPF, gameObject.transform.position + new Vector3(0.5f, 0, 0), lazerShotPF.transform.rotation);
-        shotsInReserve--;
-    }
-
-    void RechargingLazer()
+    void RechargingLaser()
     {
         if (reload < 1)
         {

@@ -64,7 +64,7 @@ public class Asteriod : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("PlayerLazer") || other.CompareTag("EnemyLazer"))
+        if (other.CompareTag("PlayerLaser") || other.CompareTag("EnemyLaser"))
         {
             health -= 10;
             Destroy(other.gameObject);

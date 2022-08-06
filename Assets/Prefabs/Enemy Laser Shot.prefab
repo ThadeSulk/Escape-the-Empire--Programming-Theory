@@ -57,11 +57,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6277678167834556792, guid: 7a1a73214368d824f842512c7ec3665a, type: 3}
       propertyPath: m_Name
-      value: Enemy Lazer Shot
+      value: Enemy Laser Shot
       objectReference: {fileID: 0}
     - target: {fileID: 6277678167834556792, guid: 7a1a73214368d824f842512c7ec3665a, type: 3}
       propertyPath: m_TagString
-      value: EnemyLazer
+      value: EnemyLaser
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a1a73214368d824f842512c7ec3665a, type: 3}

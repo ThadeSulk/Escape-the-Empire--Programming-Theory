@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : Spacecraft
 {
     private GameObject player;
-    [SerializeField] GameObject lazerShotPF;
 
     private float speed;
     public int enemyHealth = 3;     //Health for Enemy Type
@@ -15,9 +14,11 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        laserOffset = new Vector3(0.3f, 0, 0);
+
         player = GameObject.Find("Player");
         speed = Random.Range(5, 9);
-        InvokeRepeating("FireLazer", delayBeforeFire, 1 / fireRate);
+        InvokeRepeating("FireLaser", delayBeforeFire, 1 / fireRate);
     }
 
     // Update is called once per frame
@@ -48,10 +49,5 @@ public class Enemy : MonoBehaviour
     {
         Destroy(gameObject);
         LevelManager1.score += 10;
-    }
-    void FireLazer()
-    {
-        Instantiate(lazerShotPF, gameObject.transform.position + new Vector3(-0.2f, 0, 0), lazerShotPF.transform.rotation);
-        Instantiate(lazerShotPF, gameObject.transform.position + new Vector3(0.2f, 0, 0), lazerShotPF.transform.rotation);
     }
 }
