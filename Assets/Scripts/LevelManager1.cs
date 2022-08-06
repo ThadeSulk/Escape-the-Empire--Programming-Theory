@@ -26,8 +26,7 @@ public class LevelManager1 : MonoBehaviour
 
     private float xLimitAst = 13;
     private float zPosAst = 15;
-    private float xLimitEnemy = 10;
-    private float zPosEnemy = -10;
+    private Vector3 enemySpawnPosition = new Vector3(0, 0, -15);
 
     private float spawnDelayAst = 0.5f;
     private float spawnDelayAstLarge = 1f;
@@ -37,7 +36,7 @@ public class LevelManager1 : MonoBehaviour
     void Awake()
     {
         //Resets all static values at begginning of scene
-        GameManager.totalScore = 0;                      
+        GameManager.totalScore = 0;
         score = 0;
         playerShields = 2;
         isGameStarted = false;
@@ -99,7 +98,7 @@ public class LevelManager1 : MonoBehaviour
         PlayerController.OnDestruction -= GameOver;
     }
 
-        void GameOver()
+    void GameOver()
     {
         gameOver = true;
         gameOverText.SetActive(true);
@@ -134,7 +133,7 @@ public class LevelManager1 : MonoBehaviour
         int setAstSize = Random.Range(0, asteriodPFs.Length);
         int spawnOffsetX = 3;
         int spawnOffsetZ = 2;
-        Instantiate(asteriodPFs[setAstSize], position + new Vector3(Random.Range(-spawnOffsetX,spawnOffsetX), 0, Random.Range(-spawnOffsetZ,spawnOffsetZ)),
+        Instantiate(asteriodPFs[setAstSize], position + new Vector3(Random.Range(-spawnOffsetX, spawnOffsetX), 0, Random.Range(-spawnOffsetZ, spawnOffsetZ)),
             asteriodPFs[setAstSize].transform.rotation);
 
     }
@@ -154,7 +153,7 @@ public class LevelManager1 : MonoBehaviour
         if (!gameOver)
         {
             int randomEnemyType = Random.Range(0, enemyPFs.Length);
-            Instantiate(enemyPFs[randomEnemyType], RandomEnemySpawnPos(), enemyPFs[randomEnemyType].transform.rotation);
+            Instantiate(enemyPFs[randomEnemyType], enemySpawnPosition, enemyPFs[randomEnemyType].transform.rotation);
         }
     }
     void SpawnShieldBoost()
@@ -167,11 +166,5 @@ public class LevelManager1 : MonoBehaviour
     {
         float xPos = Random.Range(-xLimitAst, xLimitAst);
         return new Vector3(xPos, 0, zPosAst);
-    }
-
-    Vector3 RandomEnemySpawnPos()
-    {
-        float xPos = Random.Range(-xLimitEnemy, xLimitEnemy);
-        return new Vector3(xPos, 0, zPosEnemy);
     }
 }

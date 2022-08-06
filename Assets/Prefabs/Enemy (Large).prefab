@@ -48,6 +48,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lazerShotPF: {fileID: 1260037525614249154, guid: b12a436944f20064e948b665aae34b70, type: 3}
+  deathExplosion: {fileID: 5827195159256464635, guid: 9733a463f17cf604a8554aae8ed296ef, type: 3}
+  deathAudio: {fileID: 0}
   enemyHealth: 3
 --- !u!23 &6444169691165792623
 MeshRenderer:

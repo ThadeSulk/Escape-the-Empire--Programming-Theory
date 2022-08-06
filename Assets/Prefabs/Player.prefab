@@ -89,8 +89,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2567f656d3ca2043a7c00660343904d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerShields: 2
-  gameOver: 0
+  lazerShotPF: {fileID: 6277678167834556792, guid: 7a1a73214368d824f842512c7ec3665a, type: 3}
+  deathExplosion: {fileID: 5827195159256464635, guid: 9733a463f17cf604a8554aae8ed296ef, type: 3}
+  deathAudio: {fileID: 0}
+  shotsInReserve: 4
+  reload: 0
 --- !u!65 &2617634558456644676
 BoxCollider:
   m_ObjectHideFlags: 0
