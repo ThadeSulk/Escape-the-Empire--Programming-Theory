@@ -2,34 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : Spacecraft
+public class Enemy : MonoBehaviour
 {
     private GameObject player;
+    [SerializeField] GameObject lazerShotPF;
 
     private float speed;
-    public int enemyHealth = 3;                     //Health for Enemy Type
+    public int enemyHealth = 3;     //Health for Enemy Type
     private float delayBeforeFire = 2;
-    private float fireRate = .5f;                   //bullets per second
-
-    private float xLimitEnemy = 10;                 //positive/negative limit on random spawn
-    private float zPosEnemy = -15;
-
-    private float invincibilityLineZ = -10;         //when the enemy stops being invincible
+    private float fireRate = .5f;        //bullets per second
 
     // Start is called before the first frame update
     void Start()
     {
-        //Alter variables from parent 
-        harmfulLazerTag = "PlayerLazer";
-        lazerOffset = new Vector3(0.2f, 0, 0);
-
-        //Set new variables
         player = GameObject.Find("Player");
         speed = Random.Range(5, 9);
         InvokeRepeating("FireLazer", delayBeforeFire, 1 / fireRate);
-
-        //Reset Position
-        gameObject.transform.position = RandomEnemySpawnPos();
     }
 
     // Update is called once per frame
@@ -43,7 +31,6 @@ public class Enemy : Spacecraft
         {
             transform.Translate(Vector3.left * speed * Time.deltaTime);
         }
-        while (gameObject.transform.position.z < invincibilityLineZ) ;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -57,15 +44,14 @@ public class Enemy : Spacecraft
             }
         }
     }
-    protected override void Death()
+    private void Death()
     {
+        Destroy(gameObject);
         LevelManager1.score += 10;
-        base.Death();
     }
-
-    Vector3 RandomEnemySpawnPos()
+    void FireLazer()
     {
-        float xPos = Random.Range(-xLimitEnemy, xLimitEnemy);
-        return new Vector3(xPos, 0, zPosEnemy);
+        Instantiate(lazerShotPF, gameObject.transform.position + new Vector3(-0.2f, 0, 0), lazerShotPF.transform.rotation);
+        Instantiate(lazerShotPF, gameObject.transform.position + new Vector3(0.2f, 0, 0), lazerShotPF.transform.rotation);
     }
 }

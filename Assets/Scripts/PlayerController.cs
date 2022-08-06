@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.IO;
 
-public class PlayerController : Spacecraft
+public class PlayerController : MonoBehaviour
 {
     //Player Shields and game over in the Level Manager script
     
@@ -12,7 +12,11 @@ public class PlayerController : Spacecraft
     private float zLimit = 10;
     private float xLimit = 13;
 
+    private bool isInvincible = false;
+    private float invincibilityDuration = 1.0f; //how long is player invincible after getting hit
+
     //Variables for Shooting
+    [SerializeField] GameObject lazerShotPF;
     [SerializeField]  int shotsInReserve = 4;
     private int maxShotsInReserve = 4;
     [SerializeField] float reload = 0;
@@ -36,7 +40,6 @@ public class PlayerController : Spacecraft
         if (Input.GetKeyDown(KeyCode.Space) && shotsInReserve > 0 && LevelManager1.isGameStarted)
         {
             FireLazer();
-            shotsInReserve--;
         }
     }
 
@@ -84,7 +87,9 @@ public class PlayerController : Spacecraft
                 if (LevelManager1.playerShields <= 0)
                 {
                     LevelManager1.gameOver = true;
-                    Death();
+                    Debug.Log("Game Over!");
+                    //Play death/gameover noise
+                    OnDestruction?.Invoke();                    
                 }
                 else
                 {
@@ -96,12 +101,6 @@ public class PlayerController : Spacecraft
         }
     }
 
-    protected override void Death()
-    {
-        //Play death/gameover noise
-        OnDestruction?.Invoke();
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("ShieldBoost") && LevelManager1.playerShields < LevelManager1.maxPlayerShields)
@@ -110,7 +109,7 @@ public class PlayerController : Spacecraft
             LevelManager1.playerShields++;
             ShieldValueChange?.Invoke();
         }
-        if (other.gameObject.CompareTag(harmfulLazerTag))
+        if (other.gameObject.CompareTag("EnemyLazer"))
         {
             Destroy(other.gameObject);
             LevelManager1.playerShields--;
@@ -118,6 +117,19 @@ public class PlayerController : Spacecraft
         }
     }
 
+    IEnumerator InvincibilityFrames()
+    {
+        isInvincible = true;
+        //set animation here or in update
+        yield return new WaitForSeconds(invincibilityDuration);
+        isInvincible = false;
+    }
+    void FireLazer()
+    {
+        Instantiate(lazerShotPF, gameObject.transform.position + new Vector3(-0.5f, 0, 0), lazerShotPF.transform.rotation);
+        Instantiate(lazerShotPF, gameObject.transform.position + new Vector3(0.5f, 0, 0), lazerShotPF.transform.rotation);
+        shotsInReserve--;
+    }
 
     void RechargingLazer()
     {
