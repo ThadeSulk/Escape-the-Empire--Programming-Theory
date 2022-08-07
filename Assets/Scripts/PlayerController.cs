@@ -13,9 +13,9 @@ public class PlayerController : Spacecraft
     private float xLimit = 18;
 
     //Variables for Shooting
-    public static int shotsInReserve{ get; private set; } = 4;
+    public static int shotsInReserve{ get; private set; }
     public static int maxShotsInReserve { get; } = 4;
-    public static float reload { get; private set; } = 1;
+    public static float reload { get; private set; }
     private bool isRecharging = false;
 
     //Add Game Over event and Loss of Shields event
@@ -28,6 +28,14 @@ public class PlayerController : Spacecraft
     public delegate void OnReserveShotChange();
     public static event OnReserveShotChange ShotChange;
 
+    protected override void Awake()
+    {
+        //Reset Between games
+        shotsInReserve = 4;
+        reload = 1;
+        isRecharging = false;
+        base.Awake();
+    }
 
     // Update is called once per frame
     void Update()
@@ -76,7 +84,6 @@ public class PlayerController : Spacecraft
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Collision");
         if (collision.gameObject.CompareTag("Asteriod"))
         {
             TakeDamge();
@@ -141,12 +148,9 @@ public class PlayerController : Spacecraft
                 LevelManager1.playerShields--;
                 ShieldValueChange?.Invoke();
                 StartCoroutine(InvincibilityFrames());
-                //
-                //invincibilityShield.SetActive(false);
             }
         }
     }
-
 
     protected override void Death()
     {

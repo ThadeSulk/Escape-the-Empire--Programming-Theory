@@ -25,16 +25,22 @@ public class LevelManager1 : MonoBehaviour
     public static bool isGameStarted;
     public static bool gameOver;
 
+    //Spawning variables
     private float xLimitAst = 13;
     private float zPosAst = 15;
     private float xLimitEnemy = 10;
     private float zPosEnemy = -14;
 
-    private float spawnDelayAst = 0.5f;
+    private float baseSpawnDelayAst = 0.5f;
     private float spawnDelayAstLarge = 1f;
     private float spawnDelayShieldBoost = 5f;
+    private float spawnDelayAst;
+    //private float spawnDelayAstLarge;
+    //private float spawnDelayShieldBoost;
 
-    // Start is called before the first frame update
+    public static float enemyKilledCounter;
+    private int maxEnemiesOnScreen;
+
     void Awake()
     {
         //Resets all static values at begginning of scene
@@ -43,6 +49,8 @@ public class LevelManager1 : MonoBehaviour
         playerShields = 2;
         isGameStarted = false;
         gameOver = false;
+        enemyKilledCounter = 0;
+        maxEnemiesOnScreen = 2;
         Time.timeScale = 1; //stops error when reloading scene
     }
 
@@ -75,10 +83,14 @@ public class LevelManager1 : MonoBehaviour
 
         int enemyCount = FindObjectsOfType<Enemy>().Length;
 
-        if (enemyCount < 2 && isGameStarted)
+        if (enemyCount < maxEnemiesOnScreen && isGameStarted)
         {
             SpawnEnemy();
         }
+        //This counter system progressively increases the rate of asteroid spawning and total number of enemies on screen
+        spawnDelayAst = (float)(baseSpawnDelayAst - .05 * Mathf.Round((enemyKilledCounter - 4) / 10));
+        maxEnemiesOnScreen = 2 + Mathf.RoundToInt((enemyKilledCounter - 4) / 10);
+
     }
     void StartGame()
     {
