@@ -98,6 +98,8 @@ public class GUILevel1 : MonoBehaviour
     public void LoadMainMenu()                    //Useful if same GUI Script is used in Game, otherwise delete
     {
         GameManager.levelMusicPlayer.enabled = false;
+        Time.timeScale = 1;
+
         SceneManager.LoadScene(0);
     }
 

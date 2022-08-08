@@ -45,7 +45,7 @@ public class PlayerController : Spacecraft
         LimitToPlayspace();
         MovePlayer();
         RechargingLaser();
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetButton("Fire1")) && shotsInReserve > 0 && LevelManager1.isGameStarted && !LevelManager1.gameOver)
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Fire1")) && shotsInReserve > 0 && LevelManager1.isGameStarted && Time.timeScale != 0)
         {
             FireLaser();
             shotsInReserve--;
