@@ -24,6 +24,7 @@ public class LevelManager1 : MonoBehaviour
     public static float maxPlayerShields = 4;
     public static bool isGameStarted;
     public static bool gameOver;
+    private bool delay = false;
 
     //Spawning variables
     private float xLimitAst = 13;
@@ -59,7 +60,7 @@ public class LevelManager1 : MonoBehaviour
     {
         if (!isGameStarted)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetButton("Fire1"))
             {
                 isGameStarted = true;
                 StartGame();
@@ -67,7 +68,7 @@ public class LevelManager1 : MonoBehaviour
         }
         else if (gameOver)
         {
-            if (Input.GetKeyDown(KeyCode.Space) && !inputPanel.activeSelf)
+            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetButton("Fire1")) && !inputPanel.activeSelf && !delay)
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
@@ -115,6 +116,8 @@ public class LevelManager1 : MonoBehaviour
         gameOver = true;
         gameOverText.SetActive(true);
         Time.timeScale = 0;
+        delay = true;
+        StartCoroutine(EndDelay());
         if (SaveManager.leaderboardEntries.Count > 0)
         {
             if (score > SaveManager.leaderboardEntries[SaveManager.leaderboardEntries.Count - 1].score || SaveManager.leaderboardEntries.Count != 5)
@@ -127,8 +130,14 @@ public class LevelManager1 : MonoBehaviour
         {
             inputPanel.SetActive(true);
         }
-
     }
+
+    IEnumerator EndDelay() 
+    {
+        yield return new  WaitForSecondsRealtime(2);
+        delay = false;        
+    }
+
     void SpawnAsteriod()
     {
         if (!gameOver)

@@ -1561,10 +1561,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   laserShotPF: {fileID: 6277678167834556792, guid: 7a1a73214368d824f842512c7ec3665a, type: 3}
-  deathParticles: {fileID: 5994694960949872597, guid: 9733a463f17cf604a8554aae8ed296ef, type: 3}
+  deathParticles: {fileID: 5994694960949872597, guid: 448787b5393e3d3458cd1e3727bb36c0, type: 3}
   spacecraftAudioSource: {fileID: 8812538015279418831}
   laserAudio: {fileID: 8300000, guid: f8c2c96ed50fc7047b5a22ee08240df2, type: 3}
   deathAudio: {fileID: 8300000, guid: 9c87f285d32fa4569b77ddf3a7e6df5e, type: 3}
+  shieldHitAudio: {fileID: 8300000, guid: 3d066a79059c0c6438f5e814fb65d8a9, type: 3}
 --- !u!65 &2617634558456644676
 BoxCollider:
   m_ObjectHideFlags: 0

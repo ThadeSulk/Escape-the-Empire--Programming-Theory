@@ -8,7 +8,7 @@ public class Spacecraft : MonoBehaviour
     [SerializeField] GameObject deathParticles;
     public AudioSource spacecraftAudioSource;
     [SerializeField] AudioClip laserAudio;
-    [SerializeField] AudioClip deathAudio;
+
     protected bool isInvincible = false;
     protected float invincibilityDuration = 1.0f;                     //how long is player invincible after getting hit/ enemy after spawn
     protected Vector3 laserOffset = new Vector3(0.5f, 0, 0);
@@ -37,8 +37,7 @@ public class Spacecraft : MonoBehaviour
     }
     protected virtual void Death()
     {
-        //Play death/gameover noise
+        //Play death noise and create particles
         Instantiate(deathParticles, gameObject.transform.position, deathParticles.transform.rotation);
-        spacecraftAudioSource.PlayOneShot(deathAudio, 0.5f);
     }
 }

@@ -11,6 +11,8 @@ public class PlayerController : Spacecraft
     private float horizontalSpeed = 12;
     private float zLimit = 10;
     private float xLimit = 18;
+    public AudioClip deathAudio;
+    public AudioClip shieldHitAudio;
 
     //Variables for Shooting
     public static int shotsInReserve{ get; private set; }
@@ -43,7 +45,7 @@ public class PlayerController : Spacecraft
         LimitToPlayspace();
         MovePlayer();
         RechargingLaser();
-        if (Input.GetKeyDown(KeyCode.Space) && shotsInReserve > 0 && LevelManager1.isGameStarted)
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetButton("Fire1")) && shotsInReserve > 0 && LevelManager1.isGameStarted && !LevelManager1.gameOver)
         {
             FireLaser();
             shotsInReserve--;
@@ -144,7 +146,7 @@ public class PlayerController : Spacecraft
             }
             else
             {
-                //Activate shield hit noise
+                spacecraftAudioSource.PlayOneShot(shieldHitAudio, 1.0f);
                 LevelManager1.playerShields--;
                 ShieldValueChange?.Invoke();
                 StartCoroutine(InvincibilityFrames());
@@ -157,6 +159,7 @@ public class PlayerController : Spacecraft
         LevelManager1.gameOver = true;
         Debug.Log("Game Over!");
         OnDestruction?.Invoke();
+        spacecraftAudioSource.PlayOneShot(deathAudio, 0.8f);
         base.Death();
     }
 }

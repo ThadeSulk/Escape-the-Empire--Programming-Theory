@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public static int totalScore;
     public static int playerShields;
 
+    public static AudioSource levelMusicPlayer;
+
     //Makes a singleton of GameManager to exist until the game is exitted
     private void Awake()
     {
@@ -21,6 +23,7 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        levelMusicPlayer = GetComponent<AudioSource>();
 
         //Leaderboard is automatically saved so it needs to automatically be loaded
         SaveManager.LoadLeaderboard();

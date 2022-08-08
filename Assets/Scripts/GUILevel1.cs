@@ -24,13 +24,13 @@ public class GUILevel1 : MonoBehaviour
     {
         //Creates a list of shield icons that can be turned on and off to show shield status
         shieldIconTransformList.Add(shieldIconTransformTemplate);
-        for(int i = 1; i < LevelManager1.maxPlayerShields; i++)
+        for (int i = 1; i < LevelManager1.maxPlayerShields; i++)
         {
             float templateWidth = 25;
             Transform shieldIconTransform = Instantiate(shieldIconTransformTemplate, shieldIconParent);
             shieldIconTransform.GetComponent<RectTransform>().anchoredPosition += new Vector2(templateWidth * shieldIconTransformList.Count, 0);
             shieldIconTransformList.Add(shieldIconTransform);
-            if(shieldIconTransformList.Count > LevelManager1.playerShields)
+            if (shieldIconTransformList.Count > LevelManager1.playerShields)
             {
                 shieldIconTransform.gameObject.SetActive(false);
             }
@@ -54,7 +54,7 @@ public class GUILevel1 : MonoBehaviour
 
     private int GetActiveLaserIconCount()
     {
-        if(PlayerController.reload >= 1)
+        if (PlayerController.reload >= 1)
         {
             return PlayerController.shotsInReserve + 1;
         }
@@ -66,7 +66,7 @@ public class GUILevel1 : MonoBehaviour
         scoreText.text = LevelManager1.score.ToString();
         shieldText.text = Mathf.Round(LevelManager1.playerShields / LevelManager1.maxPlayerShields * 100).ToString() + "%";
 
-        if (Input.GetKeyDown("escape"))
+        if (Input.GetKeyDown("escape") || Input.GetKeyDown(KeyCode.Joystick1Button7))
         {
             TogglePauseMenu();
         }
@@ -97,9 +97,10 @@ public class GUILevel1 : MonoBehaviour
 
     public void LoadMainMenu()                    //Useful if same GUI Script is used in Game, otherwise delete
     {
+        GameManager.levelMusicPlayer.enabled = false;
         SceneManager.LoadScene(0);
     }
-    
+
     void OnEnable()                                 //Activates event triggers from playercontroller when LevelManager created
     {
         PlayerController.ShieldValueChange += ChangeShieldGUI;
@@ -113,7 +114,7 @@ public class GUILevel1 : MonoBehaviour
     }
 
     void ChangeShieldGUI()                          //Turns shield icons on and off when shield event is triggered, confirms shield icon exists first
-    {        
+    {
         if (Mathf.RoundToInt(LevelManager1.playerShields) >= 1)
         {
             shieldIconTransformList[Mathf.RoundToInt(LevelManager1.playerShields - 1)].gameObject.SetActive(true);

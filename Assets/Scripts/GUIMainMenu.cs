@@ -18,6 +18,8 @@ public class GUIMainMenu : MonoBehaviour
     
     public void StartGame()                     //Loads the gameplay scene
     {
+        GameManager.levelMusicPlayer.enabled = true;
+        GameManager.levelMusicPlayer.Play();
         SceneManager.LoadScene(1);
     }
     public void Exit()                          //Exits game (both in editor and final build)

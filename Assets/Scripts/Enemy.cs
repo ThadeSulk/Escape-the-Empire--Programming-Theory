@@ -96,10 +96,9 @@ public class Enemy : Spacecraft
 
     protected override void Death()
     {
+        base.Death();
         LevelManager1.score += 10;
         Destroy(gameObject);
         LevelManager1.enemyKilledCounter++;
-        Debug.Log(LevelManager1.enemyKilledCounter);
-        base.Death();
-    }
+            }
 }
